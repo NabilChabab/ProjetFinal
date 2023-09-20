@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct  Todo {
     int id;
@@ -59,9 +60,9 @@ void Afficher() {
     struct Todo todo[100];
     int i;
 
-    printf("\nYour Todo List:\n");
+    printf("\n==================================================================================== Your Todo List ====================================================================================\n");
     for (i = 0 ; i < n ; i++) {
-        printf("\nTodo %d:\n",i+1);
+        printf("======================================================================================= Todo %d =========================================================================================\n",i+1);
         printf("ID: %d\n", todo[i].id);
         printf("Deadline: %s\n", todo[i].deadline);
         printf("Title: %s\n", todo[i].Title);
@@ -69,6 +70,32 @@ void Afficher() {
         printf("Statut: %s\n", todo[i].Statut);
         
     }
+}
+void AfficherAlpha(){
+    int i, j;
+    struct Todo temp;
+    struct Todo todo[100];
+
+    for (i = 0; i < n; i++) {
+        for (j = i+1; j < n ; j++) {
+            int compare = strcmp(todo[i].Title, todo[j].Title) ; 
+            if (compare > 0) {
+
+                temp = todo[i];
+                todo[i] = todo[j];
+                todo[j] = temp;
+            }
+        }
+    }
+    for (i = 0 ; i < n ; i++){
+        printf("======================================================================================= Todo %d =========================================================================================\n",i+1);
+        printf("ID: %d\n", todo[i].id);
+        printf("Deadline: %s\n", todo[i].deadline);
+        printf("Title: %s\n", todo[i].Title);
+        printf("Description: %s\n", todo[i].Description);
+        printf("Statut: %s\n", todo[i].Statut);
+    }
+    
 }
 void Modifier(){
     
@@ -84,6 +111,33 @@ void Statistique(){
 }
 
 
+void trieMenu(){
+
+    int choix;
+
+    printf("=========================================================================================================================================================================================\n");
+    printf("========================================================================================= Trie Menu =====================================================================================\n");
+    printf("1 ===> Trier les taches par ordre alphabetique");
+    printf("\n2 ===> Trier les taches par deadline");
+    printf("\n3 ===> Afficher les taches dont le deadline est dans 3 jours ou moins");
+    printf("\n========================================================================================================================================================================================");
+    printf("\nTapez votre choix [1-3] : ");
+    scanf("%d",&choix);
+
+    switch (choix){
+        case 1:
+            AfficherAlpha();
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        default:
+            printf("erreur");
+            break;    
+    }
+
+}
 
 void Menu(){
 
@@ -118,7 +172,7 @@ void Menu(){
             AjouterP();
             break;
         case 3:
-            Afficher();
+            trieMenu();
             break;
         case 4:
             Modifier();
@@ -140,7 +194,6 @@ void Menu(){
         
     }
     while (ChoixP != 7);
-
 }
 
 
