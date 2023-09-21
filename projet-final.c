@@ -10,6 +10,7 @@ struct  Todo {
     int Statut;
 };
 
+
 int n;
 int id = 1;
 int statut = 0;
@@ -144,7 +145,83 @@ void Supprimer(){
     
 }
 
+void RecherchId(){
+    int id;
+
+    printf("Entrez l'ID de la tache a Rechercher : ");
+    scanf("%d", &id);
+
+    for (int i = 0 ; i < n; i++) {
+        if (todo[i].id == id) {
+            green();
+            printf("======================================================================================= Todo %d =========================================================================================\n",i+1);
+            printf("ID: %d\n", todo[i].id);
+            printf("Deadline: %s\n", todo[i].deadline);
+            printf("Title: %s\n", todo[i].Title);
+            printf("Description: %s\n", todo[i].Description);
+            if (todo[i].Statut == 1){
+                printf("Statut : Realiser\n");
+            }
+            else if (todo[i].Statut == 2){
+                printf("Statut : En Cours de Realisation\n");
+            }
+            else if (todo[i].Statut == 3){
+                printf("Statut : Pas Realiser\n");
+            }
+        }
+    }
+}
+
+void RecherchTitre(){
+    char title[100];
+
+    printf("Entrez le Titre de la tache a Rechercher : ");
+    scanf("%s", &title);
+
+    for (int i = 0 ; i < n; i++) {
+        if (strcmp(todo[i].Title , title) == 0) {
+            green();
+            printf("======================================================================================= Todo %d =========================================================================================\n",i+1);
+            printf("ID: %d\n", todo[i].id);
+            printf("Deadline: %s\n", todo[i].deadline);
+            printf("Title: %s\n", todo[i].Title);
+            printf("Description: %s\n", todo[i].Description);
+            if (todo[i].Statut == 1){
+                printf("Statut : Realiser\n");        
+            }
+            else if (todo[i].Statut == 2){
+                printf("Statut : En Cours de Realisation\n");
+            }
+            else if (todo[i].Statut == 3){
+                printf("Statut : Pas Realiser\n");
+            }
+        }
+    }
+}
+
 void Rechercher(){
+
+    int choix;
+
+    printf("=========================================================================================================================================================================================\n");
+    printf("===================================================================================== Modification Menu =================================================================================\n");
+    printf("1 ===> Rechercher une tache par son Id");
+    printf("\n2 ===> Rechercher une tâche par son Titre");
+    printf("\n========================================================================================================================================================================================");
+    printf("\nTapez votre choix [1-3] : ");
+    scanf("%d",&choix);
+
+    switch (choix){
+        case 1:
+            RecherchId();
+            break;
+        case 2:
+            RecherchTitre();
+            break;
+        default:
+            printf("erreur");
+            break;    
+    }
     
 }
 void Statistique(){
