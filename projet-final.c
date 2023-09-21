@@ -281,9 +281,6 @@ void Rechercher(){
     }
     
 }
-void Statistique(){
-    
-}
 
 void ModifierDescription() {
     int id;
@@ -409,6 +406,28 @@ void trieMenu(){
 
 }
 
+void Statistique(){
+
+    int s = 0;
+
+    for (int i = 0 ; i < n ; i++){
+        s = s + todo[i].id-i;
+    }
+
+    printf("la somme des Taches est : %d\n",s);
+
+    for (int i = 0; i < n ; i++){
+        if (todo[i].Statut == 1 || todo[i].Statut == 3){
+            s = s + todo[i].Statut;
+            printf("la somme des Taches Realiser et Pas Realiser est : %d",s);
+            break;
+        }
+    }
+    
+    
+    
+}
+
 void Menu(){
 
 
@@ -428,7 +447,7 @@ void Menu(){
         printf("\n4 ===> Modifier une tache");
         printf("\n5 ===> Supprimer une tache par identifiant");
         printf("\n6 ===> Rechercher les Taches");
-        printf("\n7 ===> Statistiques");
+        printf("\n7 ===> Afficher les Statistiques");
         printf("\n8 ===> Quiter");
         yellow();
         printf("\n========================================================================================================================================================================================");
