@@ -2,9 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+struct Deadline {
+    int jj;
+    int hh;
+    int mm;
+};
+
+
 struct  Todo {
     int id;
-    char deadline[100];
+    struct Deadline deadline;    
     char Title[100];
     char Description[100];
     int Statut;
@@ -60,8 +67,13 @@ void AjouterP(){
         printf("\nTapez votre choix [1-3] : ");
         scanf("%d", &todo[i].Statut);
         reset();
-        printf("Deadline: ");
-        scanf(" %29[^\n]", &todo[i].deadline);
+        printf("Deadline: \n");
+        printf("Jours : ");
+        scanf("%d", &todo[i].deadline.jj);
+        printf("Heures : ");
+        scanf("%d", &todo[i].deadline.hh);
+        printf("Minutes : ");
+        scanf("%d", &todo[i].deadline.mm);
         todo[i].id = id;
         id++;
     }
@@ -79,7 +91,12 @@ void AjouterN(){
         printf("Statut: ");
         scanf(" %29[^\n]", &todo[i].Statut);
         printf("Deadline: ");
-        scanf(" %29[^\n]", &todo[i].deadline);
+        printf("Jours : ");
+        scanf("%d", &todo[i].deadline.jj);
+        printf("Heures : ");
+        scanf("%d", &todo[i].deadline.hh);
+        printf("Minutes : ");
+        scanf("%d", &todo[i].deadline.mm);
     }
     
 }
@@ -90,7 +107,7 @@ void Afficher() {
     for (i = 0 ; i < n ; i++) {
         printf("======================================================================================= Todo %d =========================================================================================\n",i+1);
         printf("ID: %d\n", todo[i].id);
-        printf("Deadline: %s\n", todo[i].deadline);
+        printf("Deadline: %d / %d / %d \n", todo[i].deadline.jj , todo[i].deadline.hh , todo[i].deadline.mm);
         printf("Title: %s\n", todo[i].Title);
         printf("Description: %s\n", todo[i].Description);
         if (todo[i].Statut == 1){
@@ -120,12 +137,52 @@ void AfficherAlpha() {
         }
     }
     for (i = 0; i < n; i++) {
-        printf("======================================================================================= Todo %d =========================================================================================\n", i + 1);
-        printf("ID: %d\n", todo[i].id + i);
-        printf("Deadline: %s\n", todo[i].deadline);
+        printf("======================================================================================= Todo %d =========================================================================================\n",i+1);
+        printf("ID: %d\n", todo[i].id);
+        printf("Deadline: %d / %d / %d \n", todo[i].deadline.jj , todo[i].deadline.hh , todo[i].deadline.mm);
         printf("Title: %s\n", todo[i].Title);
         printf("Description: %s\n", todo[i].Description);
-        printf("Statut: %s\n", todo[i].Statut);
+        if (todo[i].Statut == 1){
+            printf("Statut : Realiser\n");        
+        }
+        else if (todo[i].Statut == 2){
+            printf("Statut : En Cours de Realisation\n");
+        }
+        else if (todo[i].Statut == 3){
+            printf("Statut : Pas Realiser\n");
+        }
+    }
+}
+
+void AfficherDeadline() {
+    struct Todo temp;
+    int i, j;
+    green();
+    printf("\n==================================================================================== Your Todo List ====================================================================================\n");
+    for (i = 0; i < n; i++) {
+        for (j = i + 1; j < n; j++) {
+            if (todo[i].deadline.jj > todo[j].deadline.jj) {
+                temp = todo[i];
+                todo[i] = todo[j];
+                todo[j] = temp;
+            }
+        }
+    }
+    for (i = 0; i < n; i++) {
+        printf("======================================================================================= Todo %d =========================================================================================\n",i+1);
+        printf("ID: %d\n", todo[i].id);
+        printf("Deadline: %d / %d / %d \n", todo[i].deadline.jj , todo[i].deadline.hh , todo[i].deadline.mm);
+        printf("Title: %s\n", todo[i].Title);
+        printf("Description: %s\n", todo[i].Description);
+        if (todo[i].Statut == 1){
+            printf("Statut : Realiser\n");        
+        }
+        else if (todo[i].Statut == 2){
+            printf("Statut : En Cours de Realisation\n");
+        }
+        else if (todo[i].Statut == 3){
+            printf("Statut : Pas Realiser\n");
+        }
     }
 }
 
@@ -156,7 +213,7 @@ void RecherchId(){
             green();
             printf("======================================================================================= Todo %d =========================================================================================\n",i+1);
             printf("ID: %d\n", todo[i].id);
-            printf("Deadline: %s\n", todo[i].deadline);
+            printf("Deadline: %d / %d / %d \n", todo[i].deadline.jj , todo[i].deadline.hh , todo[i].deadline.mm);
             printf("Title: %s\n", todo[i].Title);
             printf("Description: %s\n", todo[i].Description);
             if (todo[i].Statut == 1){
@@ -183,7 +240,7 @@ void RecherchTitre(){
             green();
             printf("======================================================================================= Todo %d =========================================================================================\n",i+1);
             printf("ID: %d\n", todo[i].id);
-            printf("Deadline: %s\n", todo[i].deadline);
+            printf("Deadline: %d / %d / %d \n", todo[i].deadline.jj , todo[i].deadline.hh , todo[i].deadline.mm);
             printf("Title: %s\n", todo[i].Title);
             printf("Description: %s\n", todo[i].Description);
             if (todo[i].Statut == 1){
@@ -283,11 +340,11 @@ void ModifierDeadline() {
 
     for (int i = 0; i < n; i++) {
         if (todo[i].id == id) {
-            printf("Entrez la nouvelle Deadline : ");
-            scanf("%s", todo[i].deadline);
+            printf("Entrez la nouvelle Deadline (jpurs) : ");
+            scanf("%d",&todo[i].deadline.jj);
             green();
             printf("Deadline modifiee avec succes.\n");
-            printf("Le nouvelle Deadline est : %s\n",todo[i].deadline);
+            printf("Le nouvelle Deadline est : %d\n",todo[i].deadline.jj);
         }
 
     }
@@ -340,8 +397,10 @@ void trieMenu(){
             AfficherAlpha();
             break;
         case 2:
+            AfficherDeadline();
             break;
         case 3:
+            Afficher();
             break;
         default:
             printf("erreur");
@@ -384,7 +443,7 @@ void Menu(){
             AjouterP();
             break;
         case 3:
-            Afficher();
+            trieMenu();
             break;
         case 4:
             Modifier();
