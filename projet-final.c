@@ -7,7 +7,7 @@ struct  Todo {
     char deadline[100];
     char Title[100];
     char Description[100];
-    char Statut[100];
+    int Statut;
 };
 
 int n;
@@ -56,17 +56,8 @@ void AjouterP(){
         printf("\n1 ===> Realiser");
         printf("\n2 ===> En Cour de Realisation");
         printf("\n3 ===> Pas Realiser");
-        printf("\nTapez votre choix [1-7] : ");
-        scanf(" %29[^\n]", &statut);
-        if (statut == 1){
-            strcpy(todo[i].Statut,"Realiser");        
-        }
-        else if (statut == 2){
-            strcpy(todo[i].Statut,"En Cour de Realisation");
-        }
-        else if (statut == 3){
-            strcpy(todo[i].Statut,"Pas Realiser");
-        }
+        printf("\nTapez votre choix [1-3] : ");
+        scanf("%d", &todo[i].Statut);
         reset();
         printf("Deadline: ");
         scanf(" %29[^\n]", &todo[i].deadline);
@@ -101,7 +92,15 @@ void Afficher() {
         printf("Deadline: %s\n", todo[i].deadline);
         printf("Title: %s\n", todo[i].Title);
         printf("Description: %s\n", todo[i].Description);
-        printf("Statut: %s\n", todo[i].Statut);
+        if (todo[i].Statut == 1){
+            printf("Statut : Realiser\n");        
+        }
+        else if (todo[i].Statut == 2){
+            printf("Statut : En Cours de Realisation\n");
+        }
+        else if (todo[i].Statut == 3){
+            printf("Statut : Pas Realiser\n");
+        }
         
     }
 }
@@ -178,8 +177,20 @@ void ModifierStatut() {
     for (int i = 0; i < n; i++) {
         if (todo[i].id == id) {
             green();
-            printf("Entrez la nouvelle Statut : ");
-            scanf("%s", todo[i].Statut);
+            printf("\n1 ===> Realiser");
+            printf("\n2 ===> En Cour de Realisation");
+            printf("\n3 ===> Pas Realiser");
+            printf("\nEntrez la nouvelle Statut : ");
+            scanf("%d",&todo[i].Statut);
+            if (todo[i].Statut == 1){
+                printf("Statut : Realiser\n");        
+            }
+            else if (todo[i].Statut == 2){
+                printf("Statut : En Cours de Realisation\n");
+            }
+            else if (todo[i].Statut == 3){
+                printf("Statut : Pas Realiser\n");
+            }
             printf("Statut modifiee avec succes.\n");
         }
     }
