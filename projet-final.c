@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 
 struct Deadline {
     int jj;
@@ -17,7 +18,7 @@ struct  Todo {
     int Statut;
 };
 
-
+char Nom[100];
 int n;
 int id = 1;
 int statut = 0;
@@ -40,6 +41,10 @@ void blue(){
 }
 void green(){
     printf("\033[0;32m");
+}
+
+void purple(){
+    printf("\033[0;35m");
 }
 
 
@@ -82,21 +87,34 @@ void AjouterN(){
 
     int i;
     n = 1;
+    int nb = 0;
     for (i = 0; i < n ; i++) {
-        printf("Entrez une tache detaills:\n", i+1);
+        yellow();
+        printf("Entrez tache %d detaills:\n", i+1);  
+        reset();      
         printf("Title: ");
-        scanf(" %29[^\n]", &todo[i].Title);
+        scanf(" %29[^\n]", &todo[nb].Title);
         printf("Description: ");
-        scanf(" %29[^\n]", &todo[i].Description);
+        scanf(" %29[^\n]", &todo[nb].Description);
         printf("Statut: ");
-        scanf(" %29[^\n]", &todo[i].Statut);
-        printf("Deadline: ");
+        yellow();
+        printf("\n1 ===> Realiser");
+        printf("\n2 ===> En Cour de Realisation");
+        printf("\n3 ===> Pas Realiser");
+        printf("\nTapez votre choix [1-3] : ");
+        scanf("%d", &todo[nb].Statut);
+        reset();
+        printf("Deadline: \n");
         printf("Jours : ");
-        scanf("%d", &todo[i].deadline.jj);
+        scanf("%d", &todo[nb].deadline.jj);
         printf("Heures : ");
-        scanf("%d", &todo[i].deadline.hh);
+        scanf("%d", &todo[nb].deadline.hh);
         printf("Minutes : ");
-        scanf("%d", &todo[i].deadline.mm);
+        scanf("%d", &todo[nb].deadline.mm);
+        todo[i].id = id;
+        todo[nb].id = nb+1;
+        id++;
+        
     }
     
 }
@@ -129,7 +147,7 @@ void AfficherAlpha() {
     printf("\n==================================================================================== Your Todo List ====================================================================================\n");
     for (i = 0; i < n; i++) {
         for (j = i + 1; j < n; j++) {
-            if (strcmp(todo[i].Title, todo[j].Title) > 0) {
+            if (strcasecmp(todo[i].Title, todo[j].Title) > 0) {
                 temp = todo[i];
                 todo[i] = todo[j];
                 todo[j] = temp;
@@ -186,6 +204,34 @@ void AfficherDeadline() {
     }
 }
 
+void Afficher3jours(){
+    struct Todo temp;
+    int i;
+    green();
+    printf("\n==================================================================================== Your Todo List ====================================================================================\n");
+    
+
+        for (i = 0; i < n; i++) {
+            if (todo[i].deadline.jj <= 3){
+                printf("======================================================================================= Todo %d =========================================================================================\n",i+1);
+                printf("ID: %d\n", todo[i].id);
+                printf("Deadline: %d / %d / %d \n", todo[i].deadline.jj , todo[i].deadline.hh , todo[i].deadline.mm);
+                printf("Title: %s\n", todo[i].Title);
+                printf("Description: %s\n", todo[i].Description);
+                if (todo[i].Statut == 1){
+                    printf("Statut : Realiser\n");        
+                }
+                else if (todo[i].Statut == 2){
+                    printf("Statut : En Cours de Realisation\n");
+                }
+                else if (todo[i].Statut == 3){
+                    printf("Statut : Pas Realiser\n");
+                }
+            }
+        
+        }
+}
+
 void Supprimer(){
     int id, i , j;
     printf("Entrez le ID que tu doit supprimer : ");
@@ -236,7 +282,7 @@ void RecherchTitre(){
     scanf("%s", &title);
 
     for (int i = 0 ; i < n; i++) {
-        if (strcmp(todo[i].Title , title) == 0) {
+        if (strcasecmp(todo[i].Title , title) == 0) {
             green();
             printf("======================================================================================= Todo %d =========================================================================================\n",i+1);
             printf("ID: %d\n", todo[i].id);
@@ -337,7 +383,7 @@ void ModifierDeadline() {
 
     for (int i = 0; i < n; i++) {
         if (todo[i].id == id) {
-            printf("Entrez la nouvelle Deadline (jpurs) : ");
+            printf("Entrez la nouvelle Deadline (jours) : ");
             scanf("%d",&todo[i].deadline.jj);
             green();
             printf("Deadline modifiee avec succes.\n");
@@ -385,6 +431,7 @@ void trieMenu(){
     printf("1 ===> Trier les taches par ordre alphabetique");
     printf("\n2 ===> Trier les taches par deadline");
     printf("\n3 ===> Afficher les taches dont le deadline est dans 3 jours ou moins");
+    printf("\n4 ===> Afficher tout les Taches");
     printf("\n========================================================================================================================================================================================");
     printf("\nTapez votre choix [1-3] : ");
     scanf("%d",&choix);
@@ -397,8 +444,11 @@ void trieMenu(){
             AfficherDeadline();
             break;
         case 3:
-            Afficher();
+            Afficher3jours();
             break;
+        case 4:
+            Afficher();
+            break;    
         default:
             printf("erreur");
             break;    
@@ -409,33 +459,52 @@ void trieMenu(){
 void Statistique(){
 
     int s = 0;
+    int s1 = 0;
+    int s2 = 0;
 
     for (int i = 0 ; i < n ; i++){
-        s = s + todo[i].id-i;
+        printf("la somme des Taches est : %d\n",n);
+        break;
     }
 
-    printf("la somme des Taches est : %d\n",s);
+    for (int i = 0; i < n ; i++){
+        if (todo[i].Statut == 1){
+            s++;
+            
+        }
+    }
+
+    printf("la somme des Taches Realiser  est : %d\n",s);
 
     for (int i = 0; i < n ; i++){
-        if (todo[i].Statut == 1 || todo[i].Statut == 3){
-            s = s + todo[i].Statut;
-            printf("la somme des Taches Realiser et Pas Realiser est : %d",s);
-            break;
+        if (todo[i].Statut == 3){
+            s1++;
+           
         }
     }
     
+    printf("la somme des Taches Pas Realiser  est : %d\n",s1);
+
+    for (int i = 0; i < n ; i++){
+        if (todo[i].Statut == 2){
+            s2++;
+           
+        }
+    }
     
-    
+    printf("la somme des Taches En Cours de Realisation  est : %d\n",s2);    
 }
 
 void Menu(){
 
 
     char ChoixP;
-
+    green();
+    printf("Salut!! ===> Entrez Votre Nom : ");
+    scanf("%s",&Nom);
         do{
-        red();
-        printf("===================================================================================== Welcome Back ======================================================================================\n");
+        purple();
+        printf("===================================================================================== Welcome Back %s ================================================================================\n",Nom);
         printf("=========================================================================================================================================================================================\n");
         printf("======================================================================================= Todo App ========================================================================================\n");
         printf("=========================================================================================================================================================================================\n");
@@ -448,7 +517,8 @@ void Menu(){
         printf("\n5 ===> Supprimer une tache par identifiant");
         printf("\n6 ===> Rechercher les Taches");
         printf("\n7 ===> Afficher les Statistiques");
-        printf("\n8 ===> Quiter");
+        printf("\n8 ===> Afficher Dans un Fichier.txt");
+        printf("\n9 ===> Quiter");
         yellow();
         printf("\n========================================================================================================================================================================================");
         printf("\nTapez votre choix [1-7] : ");
@@ -475,15 +545,19 @@ void Menu(){
             break;
         case 7:
             Statistique();
-            break;  
+            break;
         case 8:
+            Fichiertxt();
+            break;        
+        case 9:
+            red();
             printf("See You next Time Bye !!");
             exit(0);
             break;;       
         }
         
     }
-    while (ChoixP != 7);
+    while (ChoixP != 9);
 }
 
 
